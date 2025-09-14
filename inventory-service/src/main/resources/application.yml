@@ -9,14 +9,23 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password: password
+  sql:
+    init:
+      mode: always
+      platform: h2
+      continue-on-error: true
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+    defer-datasource-initialization: true   # 🔑 ESTA ES LA CLAVE
   h2:
     console:
       enabled: true
+      path: /h2-console
 
 eureka:
   client:
