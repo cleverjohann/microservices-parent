@@ -1,0 +1,5 @@
+INSERT INTO PRODUCTS (SKU, NAME, DESCRIPTION, ACTIVE, CATEGORY, PRICE, QUANTITY)
+VALUES ('pro1', 'Laptop Lenovo', 'Laptop de prueba', TRUE, 'Computers', 3200.50, 5);
+
+INSERT INTO PRODUCTS (SKU, NAME, DESCRIPTION, ACTIVE, CATEGORY, PRICE, QUANTITY)
+VALUES ('pro2', 'Mouse Logitech', 'Mouse inalámbrico', TRUE, 'Accessories', 120.00, 20);
