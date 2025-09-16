@@ -4,6 +4,7 @@ import com.ecommerce.orderservice.dto.CreateOrderDTO;
 import com.ecommerce.orderservice.dto.OrderDTO;
 import com.ecommerce.orderservice.dto.UpdateOrderDTO;
 import com.ecommerce.orderservice.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,8 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDTO> actualizarOrden(@PathVariable("id") Long id, @RequestBody UpdateOrderDTO request){
+    public ResponseEntity<OrderDTO> actualizarOrden(@PathVariable("id") Long id,
+                                                    @Valid @RequestBody UpdateOrderDTO request){
         return ResponseEntity.ok(orderService.updateOrder(id, request));
     }
 
