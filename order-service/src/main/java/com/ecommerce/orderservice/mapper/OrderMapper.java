@@ -2,8 +2,10 @@ package com.ecommerce.orderservice.mapper;
 
 import com.ecommerce.orderservice.dto.CreateOrderDTO;
 import com.ecommerce.orderservice.dto.OrderDTO;
+import com.ecommerce.orderservice.dto.UpdateOrderDTO;
 import com.ecommerce.orderservice.models.Order;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueMappingStrategy;
 
 import java.util.List;
@@ -21,4 +23,7 @@ public interface OrderMapper {
     Order toEntity(OrderDTO orderDTO);
 
     List<OrderDTO> orderDTOList(List<Order> orders);
+
+    void updateOrderFromDTO(UpdateOrderDTO updateOrderDTO, @MappingTarget Order order);
+
 }
