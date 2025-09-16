@@ -3,53 +3,64 @@ package com.ecommerce.inventoryservice.controller;
 import com.ecommerce.inventoryservice.dto.CreateProductDTO;
 import com.ecommerce.inventoryservice.dto.ProductDTO;
 import com.ecommerce.inventoryservice.service.ProductService;
+import com.ecommerce.sharedlib.dto.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
-@Slf4j
-@RestController
+@Slf4j //agregar logger
+@RestController // devuelven JSON y es controlador
 @RequestMapping("/api/inventory")
-@RequiredArgsConstructor
+@RequiredArgsConstructor //
 public class ProductController {
 
     private final ProductService productService;
 
     @GetMapping("/{sku}")
-    public ResponseEntity<ProductDTO> getProductBySku(@PathVariable("sku") String sku) {
-        log.info("Consultando producto con SKU: {}", sku); // <-- agregado
+    public ResponseEntity<ApiResponse<ProductDTO>> getProductBySku(@PathVariable("sku") String sku) {
+        log.info("Consultando producto con SKU: {}", sku);
         return productService.findById(sku)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(product -> ResponseEntity.ok(ApiResponse.success(product)))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error("Producto no encontrado"))); //respuestas consistentes
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody CreateProductDTO dto){
-        log.info("Creando producto: {}", dto); // <-- agregado
+    public ResponseEntity<ApiResponse<ProductDTO>> createProduct(@RequestBody @Valid CreateProductDTO dto){
+        log.info("Creando producto: {}", dto);
         return productService.saveProduct(dto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.badRequest().build());
+                .map(product -> ResponseEntity.ok(ApiResponse.success(product, "Producto creado con éxito")))
+                .orElse(ResponseEntity.badRequest().body(ApiResponse.error("No se pudo crear el producto")));
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts(){
-        log.info("Obteniendo todos los productos"); // <-- agregado
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<ApiResponse<List<ProductDTO>>> getAllProducts() {
+        log.info("Obteniendo todos los productos");
+        List<ProductDTO> products = productService.getAllProducts();
+        return ResponseEntity.ok(ApiResponse.success(products, "Lista de productos obtenida con éxito"));
     }
 
     @PutMapping("/{sku}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable("sku") String sku, @RequestBody ProductDTO dto){
-        log.info("Actualizando producto con SKU: {}, datos: {}", sku, dto); // <-- agregado
+    public ResponseEntity<ApiResponse<ProductDTO>> updateProduct(
+            @PathVariable("sku") String sku,
+            @RequestBody ProductDTO dto) {
+
+        log.info("Actualizando producto con SKU: {}, datos: {}", sku, dto);
+
         return productService.updateProduct(sku, dto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(product -> ResponseEntity.ok(
+                        ApiResponse.success(product, "Producto actualizado con éxito")))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.error("Producto no encontrado")));
     }
 
     @DeleteMapping("/{sku}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("sku") String sku){
-        log.info("Eliminando producto con SKU: {}", sku); // <-- agregado
+        log.info("Eliminando producto con SKU: {}", sku);
         productService.deleteProduct(sku);
         return ResponseEntity.ok().build();
     }

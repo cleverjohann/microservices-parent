@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,10 +21,11 @@ public class Product {
 
     @Id
     @Column(name = "sku", nullable = false, unique = true, length = 50)
-    public String sku;
+    private String sku;
 
+    @NotBlank
     @Column(nullable = false, length = 100)
-    public String name;
+    private String name;
 
     public String description;
 
@@ -30,6 +33,7 @@ public class Product {
     private boolean active = true;
 
     @Column(nullable = false)
+    @Positive
     private Double price;
 
     private String category;

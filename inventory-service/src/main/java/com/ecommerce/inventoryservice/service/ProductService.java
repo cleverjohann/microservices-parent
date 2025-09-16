@@ -12,11 +12,8 @@ import java.util.Optional;
 public interface ProductService {
 
     Optional<ProductDTO> findById(String sku);
-
     Optional<ProductDTO> saveProduct(CreateProductDTO dto);
-
     List<ProductDTO> getAllProducts();
-
     Optional<ProductDTO> updateProduct(String sku, ProductDTO dto);
 
     void deleteProduct(String sku);

@@ -12,7 +12,7 @@ import java.util.List;
  * Mapper para convertir entre entidades y DTOs de productos.
  */
 @Mapper(
-        componentModel = "spring",
+        componentModel = "spring", //generar un bean
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT
 )
 public interface ProductMapper {

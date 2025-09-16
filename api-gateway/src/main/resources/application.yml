@@ -16,7 +16,7 @@ spring:
           predicates:
             - Path=/api/v1/order/**
         - id: inventory-service
-          uri: lb://INVENTORY-SERVICE
+          uri: lb://inventory-service
           predicates:
             - Path=/api/inventory/**
 
@@ -24,6 +24,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+  instance:  #  No uses el nombre del host (DESKTOP-9BRBHEK). Usa la dirección IP (o localhost).
+    prefer-ip-address: true
+    hostname: localhost
 
 logging:
   level:

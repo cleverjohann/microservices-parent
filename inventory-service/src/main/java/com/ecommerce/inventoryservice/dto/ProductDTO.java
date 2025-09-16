@@ -7,7 +7,7 @@ import lombok.Data;
  */
 @Data
 public class ProductDTO {
-    private String sku;
+
     private String name;
     private String description;
     private boolean active;
