@@ -4,6 +4,7 @@ import com.ecommerce.inventoryservice.dto.CreateProductDTO;
 import com.ecommerce.inventoryservice.dto.ProductDTO;
 import com.ecommerce.inventoryservice.models.Product;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValueMappingStrategy;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public interface ProductMapper {
 
     Product createProductDTO(CreateProductDTO dto);
 
+    @Mapping(source = "sku", target = "sku")
     ProductDTO productDTO(Product product);
 
     Product toEntity(ProductDTO dto);

@@ -5,6 +5,7 @@ import com.ecommerce.orderservice.dto.OrderDTO;
 import com.ecommerce.orderservice.dto.UpdateOrderDTO;
 import com.ecommerce.orderservice.models.Order;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueMappingStrategy;
 
@@ -24,6 +25,8 @@ public interface OrderMapper {
 
     List<OrderDTO> orderDTOList(List<Order> orders);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "sku", ignore = true)
+    @Mapping(target = "status", ignore = true)
     void updateOrderFromDTO(UpdateOrderDTO updateOrderDTO, @MappingTarget Order order);
-
 }
