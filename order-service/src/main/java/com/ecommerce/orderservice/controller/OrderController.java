@@ -3,7 +3,7 @@ package com.ecommerce.orderservice.controller;
 import com.ecommerce.orderservice.dto.CreateOrderDTO;
 import com.ecommerce.orderservice.dto.OrderDTO;
 import com.ecommerce.orderservice.dto.UpdateOrderDTO;
-import com.ecommerce.orderservice.service.OrderService;
+import com.ecommerce.orderservice.service.OrderServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderServiceImpl orderService;
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrder(@PathVariable("id") Long id){

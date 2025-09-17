@@ -32,5 +32,12 @@ public class OrderExceptions {
             super("Producto no disponible: " + sku, HttpStatus.CONFLICT);
         }
     }
+
+    public static class OrderCanceledException extends BusinessException {
+        public OrderCanceledException(Long id) {
+            super("La orden " + id + " está cancelada y no puede ser modificada", HttpStatus.CONFLICT);
+        }
+    }
+
 }
 
