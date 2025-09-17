@@ -18,4 +18,8 @@ public class Order {
     private String sku;
 
     private Integer quantity;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status;
 }
