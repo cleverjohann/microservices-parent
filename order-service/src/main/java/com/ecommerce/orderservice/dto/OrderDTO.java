@@ -1,10 +1,14 @@
 package com.ecommerce.orderservice.dto;
 
-import lombok.Data;
+import com.ecommerce.orderservice.models.OrderStatus;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class OrderDTO {
     private Long id;
     private String sku;
     private Integer quantity;
+    private OrderStatus status;
 }

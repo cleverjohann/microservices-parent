@@ -1,8 +1,10 @@
 package com.ecommerce.orderservice.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CreateOrderDTO {
     private Long id;
     private String sku;
