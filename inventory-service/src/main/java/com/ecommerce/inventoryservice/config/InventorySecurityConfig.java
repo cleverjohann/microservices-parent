@@ -19,6 +19,11 @@ public class InventorySecurityConfig {
                 .authorizeHttpRequests(authz -> authz //reglas de autentifiación
                         .requestMatchers("/actuator/**").permitAll() // endpoints públicos
                         .requestMatchers("/api/inventory/**").permitAll() // desarrollo
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .anyRequest().authenticated() // resto autenticado
                 );
         return http.build();
