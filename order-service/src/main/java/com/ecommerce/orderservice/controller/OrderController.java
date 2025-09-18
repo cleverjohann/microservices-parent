@@ -26,7 +26,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> guardarOrden(@RequestBody CreateOrderDTO request){
+    public ResponseEntity<OrderDTO> guardarOrden(@Valid @RequestBody CreateOrderDTO request){ // AGREGAR @Valid
         log.info("Guardando orden: {}", request);
         OrderDTO orderDTO = orderService.saveOrder(request);
         log.info("Orden guardada: {}", orderDTO);
