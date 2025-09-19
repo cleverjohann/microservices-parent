@@ -61,4 +61,24 @@ public class ProductController {
         productService.deleteProduct(sku);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{sku}/reserve")
+    public ResponseEntity<ApiResponse<ProductDTO>> reserveStock(
+            @PathVariable("sku") String sku,
+            @RequestParam("quantity") Integer quantity) {
+
+        return productService.reserveStock(sku, quantity)
+                .map(updated -> ResponseEntity.ok(ApiResponse.success(updated, "Stock reservado con éxito")))
+                .orElse(ResponseEntity.badRequest().body(ApiResponse.error("No se pudo reservar stock")));
+    }
+
+    @PostMapping("/{sku}/release")
+    public ResponseEntity<ApiResponse<ProductDTO>> releaseStock(
+            @PathVariable("sku") String sku,
+            @RequestParam("quantity")  Integer quantity) {
+        return productService.releaseStock(sku, quantity)
+                .map(updated -> ResponseEntity.ok(ApiResponse.success(updated, "Stock liberado con éxito")))
+                .orElse(ResponseEntity.badRequest().body(ApiResponse.error("No se pudo liberar stock")));
+    }
+
 }

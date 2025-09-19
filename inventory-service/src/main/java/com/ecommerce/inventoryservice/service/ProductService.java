@@ -15,6 +15,11 @@ public interface ProductService {
     Optional<ProductDTO> saveProduct(CreateProductDTO dto);
     List<ProductDTO> getAllProducts();
     Optional<ProductDTO> updateProduct(String sku, ProductDTO dto);
-
     void deleteProduct(String sku);
+
+    Optional<ProductDTO> reserveStock(String sku, Integer quantity);
+    Optional<ProductDTO> releaseStock(String sku, Integer quantity); //liberar stock
+
+
+
 }
