@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,5 +29,7 @@ public class RegisterRequest {
     @NotBlank(message = "Password es requerido")
     @Size(min = 6, message = "Password debe tener al menos 6 caracteres")
     private String password;
+
+    private List<String> roles;
 
 }

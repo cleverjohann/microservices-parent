@@ -69,3 +69,16 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operationsSorter: method
+
+app:
+  data:
+    init:
+      enabled: true
+  admin:
+    email: admin@ecommerce.com
+    password: Admin123!
+    firstName: Super
+    lastName: Admin
+  jwt:
+    secret: mySecretKey
+    expiration: 86400000

@@ -46,7 +46,7 @@ public class UserService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(List.of(Role.USER)) // Por defecto, rol USER
+                .roles(request.getRoles() != null && !request.getRoles().isEmpty() ? request.getRoles().stream().map(Role::valueOf).toList() : List.of(Role.USER))
                 .enabled(true)
                 .build();
 
@@ -69,7 +69,7 @@ public class UserService {
 
         User user = userOpt.get();
 
-        if (!user.getEnabled()) {
+        if (!user.isEnabled()) {
             log.warn("User account is disabled: {}", email);
             return false;
         }
