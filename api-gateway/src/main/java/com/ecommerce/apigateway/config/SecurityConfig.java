@@ -11,11 +11,12 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        // TEMPORAL: Permitir todo para testing
+                        .pathMatchers("/api/auth/**").permitAll()  // Rutas públicas
+                        .pathMatchers("/actuator/**").permitAll()  // Health checks
                         .anyExchange().permitAll()
                 )
                 .build();

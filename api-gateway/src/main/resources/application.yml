@@ -4,32 +4,89 @@ server:
 spring:
   application:
     name: api-gateway
+
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
       routes:
-        - id: order-service
-          uri: lb://ORDER-SERVICE
+        # Rutas públicas del auth-service (login, registro)
+        - id: auth-service-public
+          uri: lb://auth-service
           predicates:
-            - Path=/api/v1/order/**
-        - id: inventory-service
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/auth/(?<segment>.*), /api/auth/${segment}
+
+        # Rutas protegidas del auth-service
+        - id: auth-service-protected
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - name: UserOrAdminAuthorizationFilter
+            - RewritePath=/api/users/(?<segment>.*), /api/users/${segment}
+
+        # Inventory Service - Solo lectura para USER y ADMIN
+        - id: inventory-service-read
           uri: lb://inventory-service
           predicates:
             - Path=/api/inventory/**
+            - Method=GET
+          filters:
+            - name: UserOrAdminAuthorizationFilter
+            - RewritePath=/api/inventory/(?<segment>.*), /api/inventory/${segment}
+
+        # Inventory Service - Solo ADMIN puede crear/modificar/eliminar productos
+        - id: inventory-service-write
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/inventory/**
+            - Method=POST,PUT,DELETE
+          filters:
+            - name: AdminAuthorizationFilter
+            - RewritePath=/api/inventory/(?<segment>.*), /api/inventory/${segment}
+
+        # Order Service - Solo USER y ADMIN pueden gestionar órdenes
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/v1/order/**
+          filters:
+            - name: UserOrAdminAuthorizationFilter
+            - RewritePath=/api/v1/order/(?<segment>.*), /api/v1/order/${segment}
+
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                          allowedOrigins: "*"
+                          allowedMethods: "*"
+                          allowedHeaders: "*"
+
+# JWT Configuration (debe coincidir con auth-service)
+jwt:
+  secret: "myVerySecretKey123456789012345678901234567890"
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:  #  No uses el nombre del host (DESKTOP-9BRBHEK). Usa la dirección IP (o localhost).
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
     prefer-ip-address: true
-    hostname: localhost
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,routes,gateway
+  endpoint:
+    health:
+      show-details: when_authorized
 
 logging:
   level:
+    com.ecommerce.apigateway: DEBUG
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.cloud.loadbalancer: DEBUG
-    org.springframework.web.reactive: DEBUG
+    org.springframework.security: INFO
