@@ -6,6 +6,9 @@ import com.ecommerce.inventoryservice.service.ProductService;
 import com.ecommerce.sharedlib.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor //
 public class ProductController {
 
+    @Autowired
+    private MessageSource messageSource;
+
     private final ProductService productService;
+
+    private String getMessage(String key) {
+        return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+    }
 
     @GetMapping("/{sku}")
     public ResponseEntity<ProductDTO> getProductBySku(@PathVariable("sku") String sku) {
@@ -62,14 +72,18 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PostMapping("/{sku}/reserve")
     public ResponseEntity<ApiResponse<ProductDTO>> reserveStock(
             @PathVariable("sku") String sku,
             @RequestParam("quantity") Integer quantity) {
 
         return productService.reserveStock(sku, quantity)
-                .map(updated -> ResponseEntity.ok(ApiResponse.success(updated, "Stock reservado con éxito")))
-                .orElse(ResponseEntity.badRequest().body(ApiResponse.error("No se pudo reservar stock")));
+                .map(updated -> ResponseEntity.ok(
+                        ApiResponse.success(updated, getMessage("stock.reserve.success"))
+                ))
+                .orElse(ResponseEntity.badRequest()
+                        .body(ApiResponse.error(getMessage("stock.reserve.error"))));
     }
 
     @PostMapping("/{sku}/release")

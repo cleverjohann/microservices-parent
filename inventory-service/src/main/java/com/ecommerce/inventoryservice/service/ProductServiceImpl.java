@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
         });
     }
 
-    // 🔹 Nuevo: liberar stock
+    // liberar stock
     @Override
     public Optional<ProductDTO> releaseStock(String sku, Integer quantity) {
         return productRepository.findById(sku).map(product -> {
